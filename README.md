@@ -15,7 +15,7 @@ If you guessed more than 20 times, you lose another star.
 If you have successfuly guessed all the 16 cards, you won the game and you may play again as the cards will shuffle randomly again.
 
 ## Dependencies
-* Bootstrap
+* Bootstrap<br />
 	Boothstap was used in this app to populate the icons of the game.
 
 ## Contributing
