@@ -9,6 +9,9 @@ let matches = 0;
 let moves = 0;
 let min = 0;
 let sec = 0;
+let total_time = '0:00';
+let gstars = 3;
+let play = true;
 
 
 //Definding global variables
@@ -30,63 +33,73 @@ document.querySelector('.fa-repeat').addEventListener('click', function(){
 
 //This listener checks for the clicks and according to the number of the clicked icons it will decide which function to call
 all_cards.addEventListener('click', function(event){
-	if (event.target.className == 'card'){ //checking if a card is clicked
-		if (checking.length == 0){ //checking if only one card is clicked
-			checking.push(event.target.children[0].className); //adding the clicked card to the checking list
-			parents.push(event.target); //adding the card to cards list
-			showCard(); //keep the card opened for now
-		}
-		else if (checking.length == 1) { //checking if two cards are clicked
-			checking.push(event.target.children[0].className); //adding the second card to the checking list
-			parents.push(event.target); //adding the card to the cards list
-			showCard(); //show the second card to the player
-			checkMatch(); //check if both cards are same
-			moves++; //increment the number of moves by one
-			document.querySelector('.moves').innerHTML = moves; //update the moves number
-			if (moves == 10){ //if moves are 10 then lower the stars by one
-				let stars = document.querySelector('.fa-star');
-				stars.parentNode.removeChild(stars);
+	if (play == true){
+		if (event.target.className == 'card'){ //checking if a card is clicked
+			if (checking.length == 0){ //checking if only one card is clicked
+				checking.push(event.target.children[0].className); //adding the clicked card to the checking list
+				parents.push(event.target); //adding the card to cards list
+				showCard(); //keep the card opened for now
 			}
-			if (moves == 20){ //if the moves are 20 keep only one star
-				let stars = document.querySelector('.fa-star');
-				stars.parentNode.removeChild(stars);
+			else if (checking.length == 1) { //checking if two cards are clicked
+				checking.push(event.target.children[0].className); //adding the second card to the checking list
+				parents.push(event.target); //adding the card to the cards list
+				showCard(); //show the second card to the player
+				checkMatch(); //check if both cards are same
+				moves++; //increment the number of moves by one
+				document.querySelector('.moves').innerHTML = moves; //update the moves number
+				if (moves == 10){ //if moves are 10 then lower the stars by one
+					let stars = document.querySelector('.fa-star');
+					stars.parentNode.removeChild(stars);
+					gstars = 2; 
+				}
+				if (moves == 20){ //if the moves are 20 keep only one star
+					let stars = document.querySelector('.fa-star');
+					stars.parentNode.removeChild(stars);
+					gstars = 1;
+				}
+			}
+			else { //starting checking another two cards again
+				checking = [];
+				parents = [];
+				checking.push(event.target.children[0].className);
+				parents.push(event.target);
+				showCard();
 			}
 		}
-		else { //starting checking another two cards again
-			checking = [];
-			parents = [];
-			checking.push(event.target.children[0].className);
-			parents.push(event.target);
-			showCard();
-		}
-	}
-});
 
+	}
+
+});
 
 //this function is to check the two selected cards if they match
 function checkMatch(){
+		play = false;
 		if (checking[0] == checking[1]){
-			setTimeout(function(){
+			let t1 = setTimeout(function(){
 				openMatched();
+				play = true;
 			}, 500);
 			if (matches <= 7){
 				matches++;				
 			}
 			if (matches == 8){
-				setTimeout(function(){
-					alert("Well Done. Please Play Again!! You have won in " + min + ':' + sec + ' using ' + moves + ' moves');
+				let t2 = setTimeout(function(){
+					alert("Well Done. Please Play Again!! \nYou have won in " + total_time + '\nUsing ' + moves + ' Moves' + '\nHaving ' + gstars + ' Stars');
 					updateCards();
-				}, 1000);
+					play = true;
+				}, 500);
 			}
 		}
 		else {
-			setTimeout(function(){
+			let t3 = setTimeout(function(){
 				parents[0].className = 'card';
-				parents[1].className = 'card';
+				if (parents[1] != null || parents[1] == undefined){
+					parents[1].className = 'card';
+				}
+				play = true;
 			}, 500);
 		}
 }
-
 
 //this function is to show the card to the player
 function showCard(){
@@ -106,7 +119,6 @@ function openMatched(){
 	parents[1].className = 'card match';
 }
 
-
 //this function is to update the game and reset it
 function updateCards(){
 	shuffle(cards);
@@ -118,10 +130,12 @@ function updateCards(){
 	matches = 0;
 	sec = 0;
 	moves = 0;
+	checking = [];
+	parents = [];
+	gstars = 3;
 	document.querySelector('.time').innerHTML = min + ':0' + sec;
 	document.querySelector('.moves').innerHTML = moves;
 	document.querySelector('.stars').innerHTML = "<li><i class=\"fa fa-star\"></i></li><li><i class=\"fa fa-star\"></i></li><li><i class=\"fa fa-star\"></i></li>" ;
-
 }
 
 
@@ -148,16 +162,19 @@ function startTimer(){
 		sec = 0;
 		document.querySelector('.time').innerHTML = min + ':0' + sec;
 		sec++;
+		total_time = min + ':0' + sec;
 		setTimeout(startTimer, 1000);
 	}
 	else if (sec <= 59 && sec >= 10){
 		document.querySelector('.time').innerHTML = min + ':' + sec;
 		sec++;
+		total_time = min + ':' + sec; 
 		setTimeout(startTimer, 1000);
 	}
 	else if (sec <= 9 && sec >= 0){
 		document.querySelector('.time').innerHTML = min + ':0' + sec;
 		sec++;
+		total_time = min + ':0' + sec; 
 		setTimeout(startTimer, 1000);
 	}
 }

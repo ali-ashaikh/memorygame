@@ -3,6 +3,7 @@
 ## Table of Contents
 
 * [Instructions](#instructions)
+* [Dependencies](#dependencies)
 * [Contributing](#contributing)
 
 ## Instructions
@@ -12,6 +13,10 @@ Start guessing which two cards are identical out of the 16 cards available.
 If you guessed more than 10 times, you lose one star.
 If you guessed more than 20 times, you lose another star.
 If you have successfuly guessed all the 16 cards, you won the game and you may play again as the cards will shuffle randomly again.
+
+## Dependencies
+* Bootstrap
+	Boothstap was used in this app to populate the icons of the game.
 
 ## Contributing
 
